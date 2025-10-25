@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learn Mobile Development Step-by-Step</title>
+    <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #2c3e50;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #34495e;
+            --success: #2ecc71;
+            --warning: #f39c12;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding-bottom: 2rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: var(--secondary);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            margin-bottom: 2rem;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .tagline {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .progress-container {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .progress-bar {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+        }
+        
+        .progress-bar::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            height: 4px;
+            width: 100%;
+            background: #e0e0e0;
+            z-index: 1;
+        }
+        
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            height: 4px;
+            width: 20%;
+            background: var(--primary);
+            z-index: 2;
+            transition: width 0.3s ease;
+        }
+        
+        .progress-step {
+            width: 40px;
+            height: 40px;
+            background: #e0e0e0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            z-index: 3;
+            transition: all 0.3s ease;
+        }
+        
+        .progress-step.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .step-label {
+            position: absolute;
+            top: 45px;
+            font-size: 0.9rem;
+            color: var(--dark);
+            white-space: nowrap;
+        }
+        
+        .section {
+            display: none;
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        h2 {
+            color: var(--secondary);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--light);
+        }
+        
+        h3 {
+            color: var(--secondary);
+            margin: 1.5rem 0 1rem 0;
+        }
+        
+        .concept-explanation {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .code-example {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            line-height: 1.5;
+        }
+        
+        .code-comment {
+            color: #6a9955;
+        }
+        
+        .code-keyword {
+            color: #569cd6;
+        }
+        
+        .code-string {
+            color: #ce9178;
+        }
+        
+        .code-function {
+            color: #dcdcaa;
+        }
+        
+        .interactive-demo {
+            background: #e8f4fc;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+        
+        .demo-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .demo-controls button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .demo-output {
+            background: white;
+            padding: 1rem;
+            border-radius: 4px;
+            min-height: 100px;
+            border: 1px solid #ddd;
+        }
+        
+        .practice-area {
+            background: #fff9e6;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            border-left: 4px solid var(--warning);
+        }
+        
+        .practice-task {
+            margin-bottom: 1rem;
+        }
+        
+        .practice-editor {
+            background: #2d2d2d;
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+        
+        .editor-header {
+            background: #1e1e1e;
+            padding: 0.5rem 1rem;
+            color: #ccc;
+            font-size: 0.9rem;
+        }
+        
+        .editor-content {
+            padding: 1rem;
+            color: #f8f8f2;
+            font-family: 'Courier New', monospace;
+            min-height: 150px;
+            outline: none;
+        }
+        
+        .check-button {
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 1rem;
+        }
+        
+        .feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 4px;
+            display: none;
+        }
+        
+        .feedback.correct {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            display: block;
+        }
+        
+        .feedback.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            display: block;
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+        
+        button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s ease;
+        }
+        
+        button:hover {
+            background: #2980b9;
+        }
+        
+        button.secondary {
+            background: var(--secondary);
+        }
+        
+        button.secondary:hover {
+            background: #1a252f;
+        }
+        
+        button:disabled {
+            background: #95a5a6;
+            cursor: not-allowed;
+        }
+        
+        .tip-box {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 4px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        
+        @media (max-width: 768px) {
+            .progress-bar {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+            }
+            
+            .progress-bar::before, .progress-bar::after {
+                display: none;
+            }
+            
+            .step-label {
+                position: static;
+                margin-top: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Learn Mobile Development Step-by-Step</h1>
+            <p class="tagline">Master coding fundamentals before building apps</p>
+        </header>
+        
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-step active">1</div>
+                <div class="progress-step">2</div>
+                <div class="progress-step">3</div>
+                <div class="progress-step">4</div>
+                <div class="progress-step">5</div>
+                <div class="step-label">Variables & Data</div>
+                <div class="step-label">Functions</div>
+                <div class="step-label">Control Flow</div>
+                <div class="step-label">Objects & Classes</div>
+                <div class="step-label">Build First App</div>
+            </div>
+        </div>
+        
+        <!-- Section 1: Variables & Data Types -->
+        <section id="section-1" class="section active">
+            <h2>Step 1: Variables & Data Types</h2>
+            
+            <div class="concept-explanation">
+                <h3>What are Variables?</h3>
+                <p>Variables are like containers that store information in your program. Think of them as labeled boxes where you can put different things.</p>
+                
+                <div class="code-example">
+                    <span class="code-keyword">var</span> name = <span class="code-string">"John"</span>; <span class="code-comment">// Stores text (String)</span><br>
+                    <span class="code-keyword">var</span> age = <span class="code-number">25</span>; <span class="code-comment">// Stores a number (Integer)</span><br>
+                    <span class="code-keyword">var</span> isStudent = <span class="code-keyword">true</span>; <span class="code-comment">// Stores true/false (Boolean)</span>
+                </div>
+                
+                <p>In programming, we use variables to store data that can be used and changed later in our code.</p>
+            </div>
+            
+            <div class="concept-explanation">
+                <h3>Why Use Semicolons and Commas?</h3>
+                <p>Semicolons (;) tell the computer where one instruction ends and another begins. Commas (,) are used to separate items in a list.</p>
+                
+                <div class="code-example">
+                    <span class="code-comment">// Semicolons end statements</span><br>
+                    <span class="code-keyword">var</span> firstName = <span class="code-string">"Jane"</span>;<br>
+                    <span class="code-keyword">var</span> lastName = <span class="code-string">"Doe"</span>;<br><br>
+                    
+                    <span class="code-comment">// Commas separate items in a list</span><br>
+                    <span class="code-keyword">var</span> colors = [<span class="code-string">"red"</span>, <span class="code-string">"green"</span>, <span class="code-string">"blue"</span>];
+                </div>
+            </div>
+            
+            <div class="interactive-demo">
+                <h3>Try It Yourself: Variables</h3>
+                <p>Change the values and see what happens:</p>
+                
+                <div class="demo-controls">
+                    <button onclick="updateVariableDemo('name', 'Alice')">Change Name to Alice</button>
+                    <button onclick="updateVariableDemo('name', 'Bob')">Change Name to Bob</button>
+                    <button onclick="updateVariableDemo('age', 30)">Change Age to 30</button>
+                    <button onclick="updateVariableDemo('age', 18)">Change Age to 18</button>
+                </div>
+                
+                <div class="demo-output" id="variable-demo">
+                    <p>Hello, my name is <strong>John</strong> and I am <strong>25</strong> years old.</p>
+                </div>
+            </div>
+            
+            <div class="practice-area">
+                <h3>Practice: Create Your Own Variables</h3>
+                <div class="practice-task">
+                    <p>Create two variables:</p>
+                    <ul>
+                        <li>A variable called <code>city</code> that stores your city name</li>
+                        <li>A variable called <code>temperature</code> that stores today's temperature</li>
+                    </ul>
+                </div>
+                
+                <div class="practice-editor">
+                    <div class="editor-header">practice.js</div>
+                    <div class="editor-content" contenteditable="true" id="variable-practice">
+// Create your variables here
+var city = "New York";
+var temperature = 72;
+                    </div>
+                </div>
+                
+                <button class="check-button" onclick="checkVariablePractice()">Check My Code</button>
+                
+                <div class="feedback" id="variable-feedback"></div>
+            </div>
+            
+            <div class="navigation">
+                <button class="secondary" disabled>Previous</button>
+                <button onclick="showSection(2)">Next: Functions</button>
+            </div>
+        </section>
+        
+        <!-- Section 2: Functions -->
+        <section id="section-2" class="section">
+            <h2>Step 2: Functions</h2>
+            
+            <div class="concept-explanation">
+                <h3>What are Functions?</h3>
+                <p>Functions are reusable blocks of code that perform a specific task. They help you avoid writing the same code multiple times.</p>
+                
+                <div class="code-example">
+                    <span class="code-comment">// Defining a function</span><br>
+                    <span class="code-keyword">function</span> <span class="code-function">greet</span>() {<br>
+                    &nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-string">"Hello, world!"</span>;<br>
+                    }<br><br>
+                    
+                    <span class="code-comment">// Using (calling) the function</span><br>
+                    <span class="code-keyword">var</span> message = <span class="code-function">greet</span>(); <span class="code-comment">// message now contains "Hello, world!"</span>
+                </div>
+            </div>
+            
+            <div class="concept-explanation">
+                <h3>Function Parameters</h3>
+                <p>Functions can accept inputs called parameters, which make them more flexible.</p>
+                
+                <div class="code-example">
+                    <span class="code-comment">// Function with parameters</span><br>
+                    <span class="code-keyword">function</span> <span class="code-function">greetPerson</span>(name) {<br>
+                    &nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-string">"Hello, "</span> + name + <span class="code-string">"!"</span>;<br>
+                    }<br><br>
+                    
+                    <span class="code-comment">// Using the function with different inputs</span><br>
+                    <span class="code-keyword">var</span> greeting1 = <span class="code-function">greetPerson</span>(<span class="code-string">"Alice"</span>);<br>
+                    <span class="code-keyword">var</span> greeting2 = <span class="code-function">greetPerson</span>(<span class="code-string">"Bob"</span>);
+                </div>
+                
+                <div class="tip-box">
+                    <strong>Tip:</strong> The parentheses <code>()</code> after the function name are where you put the parameters. 
+                    Curly braces <code>{}</code> contain the code that runs when the function is called.
+                </div>
+            </div>
+            
+            <div class="interactive-demo">
+                <h3>Try It Yourself: Functions</h3>
+                <p>Call the function with different names:</p>
+                
+                <div class="demo-controls">
+                    <input type="text" id="function-input" placeholder="Enter a name" value="Sarah">
+                    <button onclick="runFunctionDemo()">Run Function</button>
+                </div>
+                
+                <div class="demo-output" id="function-demo">
+                    <p>Enter a name and click "Run Function" to see the result.</p>
+                </div>
+            </div>
+            
+            <div class="practice-area">
+                <h3>Practice: Create a Function</h3>
+                <div class="practice-task">
+                    <p>Create a function called <code>calculateArea</code> that takes two parameters (width and height) and returns the area (width × height).</p>
+                </div>
+                
+                <div class="practice-editor">
+                    <div class="editor-header">practice.js</div>
+                    <div class="editor-content" contenteditable="true" id="function-practice">
+// Create your function here
+function calculateArea(width, height) {
+    return width * height;
+}
+                    </div>
+                </div>
+                
+                <button class="check-button" onclick="checkFunctionPractice()">Check My Code</button>
+                
+                <div class="feedback" id="function-feedback"></div>
+            </div>
+            
+            <div class="navigation">
+                <button class="secondary" onclick="showSection(1)">Previous: Variables</button>
+                <button onclick="showSection(3)">Next: Control Flow</button>
+            </div>
+        </section>
+        
+        <!-- Section 3: Control Flow -->
+        <section id="section-3" class="section">
+            <h2>Step 3: Control Flow</h2>
+            
+            <div class="concept-explanation">
+                <h3>Making Decisions with If/Else</h3>
+                <p>Control flow lets your program make decisions and execute different code based on conditions.</p>
+                
+                <div class="code-example">
+                    <span class="code-keyword">var</span> temperature = <span class="code-number">75</span>;<br><br>
+                    
+                    <span class="code-keyword">if</span> (temperature > <span class="code-number">80</span>) {<br>
+                    &nbsp;&nbsp;console.<span class="code-function">log</span>(<span class="code-string">"It's hot outside!"</span>);<br>
+                    } <span class="code-keyword">else if</span> (temperature > <span class="code-number">60</span>) {<br>
+                    &nbsp;&nbsp;console.<span class="code-function">log</span>(<span class="code-string">"It's pleasant outside."</span>);<br>
+                    } <span class="code-keyword">else</span> {<br>
+                    &nbsp;&nbsp;console.<span class="code-function">log</span>(<span class="code-string">"It's cold outside!"</span>);<br>
+                    }
+                </div>
+            </div>
+            
+            <div class="concept-explanation">
+                <h3>Loops: Repeating Actions</h3>
+                <p>Loops let you repeat code multiple times, which is useful for working with lists of items.</p>
+                
+                <div class="code-example">
+                    <span class="code-comment">// For loop - repeats a specific number of times</span><br>
+                    <span class="code-keyword">for</span> (<span class="code-keyword">var</span> i = <span class="code-number">0</span>; i < <span class="code-number">5</span>; i++) {<br>
+                    &nbsp;&nbsp;console.<span class="code-function">log</span>(<span class="code-string">"Count: "</span> + i);<br>
+                    }<br><br>
+                    
+                    <span class="code-comment">// While loop - repeats while a condition is true</span><br>
+                    <span class="code-keyword">var</span> count = <span class="code-number">0</span>;<br>
+                    <span class="code-keyword">while</span> (count < <span class="code-number">3</span>) {<br>
+                    &nbsp;&nbsp;console.<span class="code-function">log</span>(<span class="code-string">"Hello!"</span>);<br>
+                    &nbsp;&nbsp;count++; <span class="code-comment">// Increase count by 1</span><br>
+                    }
+                </div>
+                
+                <div class="tip-box">
+                    <strong>Tip:</strong> The symbols <code>&lt;</code> (less than), <code>&gt;</code> (greater than), 
+                    <code>&lt;=</code> (less than or equal to), and <code>&gt;=</code> (greater than or equal to) are 
+                    comparison operators used in conditions.
+                </div>
+            </div>
+            
+            <div class="interactive-demo">
+                <h3>Try It Yourself: Control Flow</h3>
+                <p>Change the temperature and see the message:</p>
+                
+                <div class="demo-controls">
+                    <input type="range" id="temp-slider" min="50" max="100" value="75">
+                    <span id="temp-value">75°F</span>
+                </div>
+                
+                <div class="demo-output" id="controlflow-demo">
+                    <p>It's pleasant outside.</p>
+                </div>
+            </div>
+            
+            <div class="practice-area">
+                <h3>Practice: Create a Decision Function</h3>
+                <div class="practice-task">
+                    <p>Create a function called <code>checkGrade</code> that takes a score (0-100) and returns:</p>
+                    <ul>
+                        <li>"A" if score is 90 or above</li>
+                        <li>"B" if score is 80-89</li>
+                        <li>"C" if score is 70-79</li>
+                        <li>"F" if score is below 70</li>
+                    </ul>
+                </div>
+                
+                <div class="practice-editor">
+                    <div class="editor-header">practice.js</div>
+                    <div class="editor-content" contenteditable="true" id="controlflow-practice">
+// Create your function here
+function checkGrade(score) {
+    if (score >= 90) {
+        return "A";
+    } else if (score >= 80) {
+        return "B";
+    } else if (score >= 70) {
+        return "C";
+    } else {
+        return "F";
+    }
+}
+                    </div>
+                </div>
+                
+                <button class="check-button" onclick="checkControlFlowPractice()">Check My Code</button>
+                
+                <div class="feedback" id="controlflow-feedback"></div>
+            </div>
+            
+            <div class="navigation">
+                <button class="secondary" onclick="showSection(2)">Previous: Functions</button>
+                <button onclick="showSection(4)">Next: Objects & Classes</button>
+            </div>
+        </section>
+        
+        <!-- Section 4: Objects & Classes -->
+        <section id="section-4" class="section">
+            <h2>Step 4: Objects & Classes</h2>
+            
+            <div class="concept-explanation">
+                <h3>What are Objects?</h3>
+                <p>Objects let you group related data and functions together. Think of them as containers that hold both properties (data) and methods (functions).</p>
+                
+                <div class="code-example">
+                    <span class="code-comment">// Creating an object</span><br>
+                    <span class="code-keyword">var</span> person = {<br>
+                    &nbsp;&nbsp;firstName: <span class="code-string">"John"</span>,<br>
+                    &nbsp;&nbsp;lastName: <span class="code-string">"Doe"</span>,<br>
+                    &nbsp;&nbsp;age: <span class="code-number">30</span>,<br>
+                    &nbsp;&nbsp;getFullName: <span class="code-keyword">function</span>() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-keyword">this</span>.firstName + <span class="code-string">" "</span> + <span class="code-keyword">this</span>.lastName;<br>
+                    &nbsp;&nbsp;}<br>
+                    };<br><br>
+                    
+                    <span class="code-comment">// Using the object</span><br>
+                    console.<span class="code-function">log</span>(person.firstName); <span class="code-comment">// "John"</span><br>
+                    console.<span class="code-function">log</span>(person.getFullName()); <span class="code-comment">// "John Doe"</span>
+                </div>
+            </div>
+            
+            <div class="concept-explanation">
+                <h3>Classes: Blueprints for Objects</h3>
+                <p>Classes are templates for creating multiple objects with the same structure.</p>
+                
+                <div class="code-example">
+                    <span class="code-comment">// Defining a class</span><br>
+                    <span class="code-keyword">class</span> Person {<br>
+                    &nbsp;&nbsp;<span class="code-function">constructor</span>(name, age) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.name = name;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.age = age;<br>
+                    &nbsp;&nbsp;}<br><br>
+                    
+                    &nbsp;&nbsp;<span class="code-function">introduce</span>() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-string">"Hi, I'm "</span> + <span class="code-keyword">this</span>.name + <span class="code-string">" and I'm "</span> + <span class="code-keyword">this</span>.age + <span class="code-string">" years old."</span>;<br>
+                    &nbsp;&nbsp;}<br>
+                    }<br><br>
+                    
+                    <span class="code-comment">// Creating objects from the class</span><br>
+                    <span class="code-keyword">var</span> person1 = <span class="code-keyword">new</span> Person(<span class="code-string">"Alice"</span>, <span class="code-number">25</span>);<br>
+                    <span class="code-keyword">var</span> person2 = <span class="code-keyword">new</span> Person(<span class="code-string">"Bob"</span>, <span class="code-number">30</span>);
+                </div>
+                
+                <div class="tip-box">
+                    <strong>Tip:</strong> The <code>this</code> keyword refers to the current object. In a class, 
+                    <code>this.name</code> means "the name property of this specific object".
+                </div>
+            </div>
+            
+            <div class="interactive-demo">
+                <h3>Try It Yourself: Objects</h3>
+                <p>Create a person object and see their introduction:</p>
+                
+                <div class="demo-controls">
+                    <input type="text" id="person-name" placeholder="Name" value="Emily">
+                    <input type="number" id="person-age" placeholder="Age" value="28">
+                    <button onclick="createPersonDemo()">Create Person</button>
+                </div>
+                
+                <div class="demo-output" id="object-demo">
+                    <p>Enter a name and age, then click "Create Person".</p>
+                </div>
+            </div>
+            
+            <div class="practice-area">
+                <h3>Practice: Create a Class</h3>
+                <div class="practice-task">
+                    <p>Create a <code>Book</code> class with properties for <code>title</code>, <code>author</code>, and <code>year</code>. 
+                    Add a method called <code>getInfo</code> that returns a string with the book's information.</p>
+                </div>
+                
+                <div class="practice-editor">
+                    <div class="editor-header">practice.js</div>
+                    <div class="editor-content" contenteditable="true" id="object-practice">
+// Create your class here
+class Book {
+    constructor(title, author, year) {
+        this.title = title;
+        this.author = author;
+        this.year = year;
+    }
+    
+    getInfo() {
+        return this.title + " by " + this.author + " (" + this.year + ")";
+    }
+}
+                    </div>
+                </div>
+                
+                <button class="check-button" onclick="checkObjectPractice()">Check My Code</button>
+                
+                <div class="feedback" id="object-feedback"></div>
+            </div>
+            
+            <div class="navigation">
+                <button class="secondary" onclick="showSection(3)">Previous: Control Flow</button>
+                <button onclick="showSection(5)">Next: Build Your First App</button>
+            </div>
+        </section>
+        
+        <!-- Section 5: Build Your First App -->
+        <section id="section-5" class="section">
+            <h2>Step 5: Build Your First App</h2>
+            
+            <div class="concept-explanation">
+                <h3>Putting It All Together</h3>
+                <p>Now let's use everything you've learned to create a simple mobile app - a task manager!</p>
+                
+                <div class="code-example">
+                    <span class="code-comment">// Task class to represent each task</span><br>
+                    <span class="code-keyword">class</span> Task {<br>
+                    &nbsp;&nbsp;<span class="code-function">constructor</span>(name, completed = <span class="code-keyword">false</span>) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.name = name;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.completed = completed;<br>
+                    &nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;<br>
+                    &nbsp;&nbsp;<span class="code-function">toggleComplete</span>() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.completed = !<span class="code-keyword">this</span>.completed;<br>
+                    &nbsp;&nbsp;}<br>
+                    }<br><br>
+                    
+                    <span class="code-comment">// TaskManager class to manage all tasks</span><br>
+                    <span class="code-keyword">class</span> TaskManager {<br>
+                    &nbsp;&nbsp;<span class="code-function">constructor</span>() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.tasks = [];<br>
+                    &nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;<br>
+                    &nbsp;&nbsp;<span class="code-function">addTask</span>(name) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">var</span> newTask = <span class="code-keyword">new</span> Task(name);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.tasks.push(newTask);<br>
+                    &nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;<br>
+                    &nbsp;&nbsp;<span class="code-function">getTasks</span>() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-keyword">this</span>.tasks;<br>
+                    &nbsp;&nbsp;}<br>
+                    }
+                </div>
+            </div>
+            
+            <div class="interactive-demo">
+                <h3>Your Task Manager App</h3>
+                <p>Try out the task manager you just learned about:</p>
+                
+                <div class="demo-controls">
+                    <input type="text" id="task-input" placeholder="Enter a new task">
+                    <button onclick="addTaskToManager()">Add Task</button>
+                </div>
+                
+                <div class="demo-output" id="app-demo">
+                    <h4>Your Tasks:</h4>
+                    <ul id="task-list">
+                        <li>No tasks yet. Add your first task!</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="practice-area">
+                <h3>Practice: Extend the App</h3>
+                <div class="practice-task">
+                    <p>Add a method to the TaskManager class called <code>removeTask</code> that takes a task name and removes it from the tasks list.</p>
+                </div>
+                
+                <div class="practice-editor">
+                    <div class="editor-header">practice.js</div>
+                    <div class="editor-content" contenteditable="true" id="app-practice">
+// Add the removeTask method here
+class TaskManager {
+    constructor() {
+        this.tasks = [];
+    }
+    
+    addTask(name) {
+        var newTask = new Task(name);
+        this.tasks.push(newTask);
+    }
+    
+    getTasks() {
+        return this.tasks;
+    }
+    
+    // Add your removeTask method here
+    removeTask(taskName) {
+        this.tasks = this.tasks.filter(task => task.name !== taskName);
+    }
+}
+                    </div>
+                </div>
+                
+                <button class="check-button" onclick="checkAppPractice()">Check My Code</button>
+                
+                <div class="feedback" id="app-feedback"></div>
+            </div>
+            
+            <div class="concept-explanation">
+                <h3>Congratulations!</h3>
+                <p>You've learned the fundamental programming concepts needed for mobile development! With variables, functions, control flow, and objects/classes, you now have the foundation to start building real mobile apps.</p>
+                
+                <p>In the next phase, you'll learn about mobile-specific concepts like:</p>
+                <ul>
+                    <li>User interfaces and layouts</li>
+                    <li>Handling user input</li>
+                    <li>Working with device features (camera, GPS, etc.)</li>
+                    <li>Connecting to backend services</li>
+                </ul>
+            </div>
+            
+            <div class="navigation">
+                <button class="secondary" onclick="showSection(4)">Previous: Objects & Classes</button>
+                <button disabled>Complete!</button>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Section navigation
+        function showSection(sectionNumber) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(`section-${sectionNumber}`).classList.add('active');
+            
+            // Update progress bar
+            const progressSteps = document.querySelectorAll('.progress-step');
+            const progressBar = document.querySelector('.progress-bar');
+            
+            progressSteps.forEach((step, index) => {
+                if (index < sectionNumber) {
+                    step.classList.add('active');
+                } else {
+                    step.classList.remove('active');
+                }
+            });
+            
+            // Update progress bar line
+            const progressPercentage = (sectionNumber - 1) / 4 * 100;
+            progressBar.style.setProperty('--progress-width', `${progressPercentage}%`);
+        }
+        
+        // Section 1: Variables Demo
+        let demoName = "John";
+        let demoAge = 25;
+        
+        function updateVariableDemo(variable, value) {
+            if (variable === 'name') {
+                demoName = value;
+            } else if (variable === 'age') {
+                demoAge = value;
+            }
+            
+            document.getElementById('variable-demo').innerHTML = 
+                `<p>Hello, my name is <strong>${demoName}</strong> and I am <strong>${demoAge}</strong> years old.</p>`;
+        }
+        
+        function checkVariablePractice() {
+            const feedback = document.getElementById('variable-feedback');
+            const code = document.getElementById('variable-practice').textContent;
+            
+            if (code.includes('var city') && code.includes('var temperature')) {
+                feedback.textContent = "Great! You've successfully created two variables.";
+                feedback.className = 'feedback correct';
+            } else {
+                feedback.textContent = "Make sure you create both variables: 'city' and 'temperature'.";
+                feedback.className = 'feedback incorrect';
+            }
+        }
+        
+        // Section 2: Functions Demo
+        function runFunctionDemo() {
+            const name = document.getElementById('function-input').value || 'Sarah';
+            document.getElementById('function-demo').innerHTML = 
+                `<p>Hello, ${name}! Welcome to programming!</p>`;
+        }
+        
+        function checkFunctionPractice() {
+            const feedback = document.getElementById('function-feedback');
+            const code = document.getElementById('function-practice').textContent;
+            
+            if (code.includes('function calculateArea') && code.includes('width') && 
+                code.includes('height') && code.includes('return') && 
+                (code.includes('width * height') || code.includes('width*height'))) {
+                feedback.textContent = "Perfect! Your function correctly calculates the area.";
+                feedback.className = 'feedback correct';
+            } else {
+                feedback.textContent = "Make sure your function is named 'calculateArea', takes two parameters (width and height), and returns width multiplied by height.";
+                feedback.className = 'feedback incorrect';
+            }
+        }
+        
+        // Section 3: Control Flow Demo
+        const tempSlider = document.getElementById('temp-slider');
+        const tempValue = document.getElementById('temp-value');
+        const controlflowDemo = document.getElementById('controlflow-demo');
+        
+        tempSlider.addEventListener('input', function() {
+            const temp = parseInt(this.value);
+            tempValue.textContent = `${temp}°F`;
+            
+            let message;
+            if (temp > 80) {
+                message = "It's hot outside!";
+            } else if (temp > 60) {
+                message = "It's pleasant outside.";
+            } else {
+                message = "It's cold outside!";
+            }
+            
+            controlflowDemo.innerHTML = `<p>${message}</p>`;
+        });
+        
+        function checkControlFlowPractice() {
+            const feedback = document.getElementById('controlflow-feedback');
+            const code = document.getElementById('controlflow-practice').textContent;
+            
+            if (code.includes('function checkGrade') && code.includes('score') && 
+                code.includes('if') && code.includes('else if') && code.includes('return')) {
+                feedback.textContent = "Excellent! Your function correctly evaluates grades based on the score.";
+                feedback.className = 'feedback correct';
+            } else {
+                feedback.textContent = "Make sure your function uses if/else if/else statements to check the score and return the correct grade.";
+                feedback.className = 'feedback incorrect';
+            }
+        }
+        
+        // Section 4: Objects Demo
+        function createPersonDemo() {
+            const name = document.getElementById('person-name').value || 'Emily';
+            const age = document.getElementById('person-age').value || '28';
+            
+            document.getElementById('object-demo').innerHTML = 
+                `<p>Hi, I'm ${name} and I'm ${age} years old. Nice to meet you!</p>`;
+        }
+        
+        function checkObjectPractice() {
+            const feedback = document.getElementById('object-feedback');
+            const code = document.getElementById('object-practice').textContent;
+            
+            if (code.includes('class Book') && code.includes('constructor') && 
+                code.includes('title') && code.includes('author') && code.includes('year') &&
+                code.includes('getInfo') && code.includes('return')) {
+                feedback.textContent = "Well done! Your Book class is correctly implemented.";
+                feedback.className = 'feedback correct';
+            } else {
+                feedback.textContent = "Make sure your Book class has a constructor with title, author, and year parameters, and a getInfo method that returns a string with the book's information.";
+                feedback.className = 'feedback incorrect';
+            }
+        }
+        
+        // Section 5: App Demo
+        class Task {
+            constructor(name, completed = false) {
+                this.name = name;
+                this.completed = completed;
+            }
+            
+            toggleComplete() {
+                this.completed = !this.completed;
+            }
+        }
+        
+        class TaskManager {
+            constructor() {
+                this.tasks = [];
+            }
+            
+            addTask(name) {
+                const newTask = new Task(name);
+                this.tasks.push(newTask);
+                this.renderTasks();
+            }
+            
+            removeTask(taskName) {
+                this.tasks = this.tasks.filter(task => task.name !== taskName);
+                this.renderTasks();
+            }
+            
+            renderTasks() {
+                const taskList = document.getElementById('task-list');
+                
+                if (this.tasks.length === 0) {
+                    taskList.innerHTML = '<li>No tasks yet. Add your first task!</li>';
+                    return;
+                }
+                
+                taskList.innerHTML = '';
+                this.tasks.forEach(task => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `
+                        <span style="${task.completed ? 'text-decoration: line-through;' : ''}">
+                            ${task.name}
+                        </span>
+                        <button onclick="taskManager.tasks.find(t => t.name === '${task.name}').toggleComplete(); taskManager.renderTasks();" style="margin-left: 10px;">
+                            ${task.completed ? 'Undo' : 'Complete'}
+                        </button>
+                        <button onclick="taskManager.removeTask('${task.name}')" style="margin-left: 5px;">Delete</button>
+                    `;
+                    taskList.appendChild(li);
+                });
+            }
+        }
+        
+        const taskManager = new TaskManager();
+        
+        function addTaskToManager() {
+            const taskInput = document.getElementById('task-input');
+            const taskName = taskInput.value.trim();
+            
+            if (taskName) {
+                taskManager.addTask(taskName);
+                taskInput.value = '';
+            }
+        }
+        
+        function checkAppPractice() {
+            const feedback = document.getElementById('app-feedback');
+            const code = document.getElementById('app-practice').textContent;
+            
+            if (code.includes('removeTask') && (code.includes('filter') || code.includes('splice') || code.includes('findIndex'))) {
+                feedback.textContent = "Excellent! Your removeTask method is correctly implemented.";
+                feedback.className = 'feedback correct';
+            } else {
+                feedback.textContent = "Make sure you create a removeTask method that finds and removes the task with the given name from the tasks array.";
+                feedback.className = 'feedback incorrect';
+            }
+        }
+        
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set up CSS for progress bar
+            const style = document.createElement('style');
+            style.textContent = `
+                .progress-bar::after {
+                    width: calc(var(--progress-width, 0) * 1%);
+                }
+            `;
+            document.head.appendChild(style);
+        });
+    </script>
+</body>
+</html>
